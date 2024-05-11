@@ -10,7 +10,7 @@ int pacmanHeight=100;
 int pacmanSpeed=3;
 
 
-boolean rightHandDirection = true;
+boolean faceRight = true;
 
 void setup() {
   size(1000, 1000); // Set the size of the canvas to 400x400 pixels
@@ -23,14 +23,16 @@ void draw() {
 }
 
 void drawPacman() {
-  fill(255, 255, 0); // Set fill color to yellow
-  arc(pacmanX, pacmanY, pacmanWidth, pacmanHeight, radians(mouthAngle), radians(360 - mouthAngle), PIE); // Draw Pac-Man body
-
-  fill(255); // Set fill color to white
-  ellipse(pacmanX-10, pacmanY-10, 10, 10); // Draw Pac-Man eye
+  if(faceRight){
+    mouthDirectionRight();
+  }else{
+    mouthDirectionLeft();
+  }
   
   mouthAnimation();
-  movement();
+  //movement();
+  
+
 }
 
 
@@ -40,6 +42,27 @@ void mouthAnimation(){
   int value=elapsedTime % animationDuration;
   
   mouthAngle = map(value, 0, animationDuration, 45, 0);
+}
+
+
+void mouthDirectionRight(){
+  fill(255, 255, 0); // Set fill color to yellow
+  arc(pacmanX, pacmanY, pacmanWidth, pacmanHeight, radians(mouthAngle), radians(360 - mouthAngle), PIE); // Draw Pac-Man body
+
+  fill(255); // Set fill color to white
+  ellipse(pacmanX-10, pacmanY-10, 10, 10); // Draw Pac-Man eye
+  
+}
+
+void mouthDirectionLeft(){
+  fill(255, 255, 0); // Set fill color to yellow
+  //arc(pacmanX, pacmanY, pacmanWidth, pacmanHeight, radians(180), radians(400), PIE); // Draw Pac-Man body
+  arc(pacmanX, pacmanY, pacmanWidth, pacmanHeight, radians(180+mouthAngle), radians(540-mouthAngle), PIE); // Draw Pac-Man body
+
+   
+
+  fill(255); // Set fill color to white
+  ellipse(pacmanX-3, pacmanY-16, 10, 10); // Draw Pac-Man eye
 }
 
 
@@ -57,6 +80,6 @@ void movement(){
 
 void keyPressed(){
   if(key == ' '){
-    println("spacebar");
+    faceRight =! faceRight;
   }
 }
