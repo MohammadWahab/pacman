@@ -7,7 +7,7 @@ int pacmanX=200;
 int pacmanY=200;
 int pacmanWidth=100;
 int pacmanHeight=100;
-int pacmanSpeed=3;
+int pacmanSpeed=1;
 
 
 boolean faceRight = true;
@@ -30,7 +30,7 @@ void drawPacman() {
   }
   
   mouthAnimation();
-  //movement();
+  movement();
   
 
 }
@@ -67,13 +67,18 @@ void mouthDirectionLeft(){
 
 
 void movement(){
- 
-  pacmanX += pacmanSpeed ;
   int radius= pacmanWidth / 2;
-  
- if ((pacmanX  - radius)>width){
+  if(faceRight){
+  pacmanX += pacmanSpeed ;
+  if ((pacmanX  - radius)>width){
     pacmanX = - radius;
    
+ }
+ }else{
+   pacmanX -= pacmanSpeed;
+   if((pacmanX+radius)<0){
+     pacmanX=width+radius;
+   }
  }
 
 }
