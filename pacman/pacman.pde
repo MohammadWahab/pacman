@@ -3,14 +3,18 @@ int animationDuration = 800; // Duration of animation in milliseconds
 int startTime; // Variable to store the start time of the animation
 
 
-int pacmanX=200;
+int pacmanX=600;
 int pacmanY=200;
 int pacmanWidth=100;
 int pacmanHeight=100;
-int pacmanSpeed=1;
-
-
+int pacmanSpeed=3;
 boolean faceRight = true;
+
+
+int enemyX=200;
+int enemyY=200;
+int enemySize=100;
+int enemySpeed=2;
 
 void setup() {
   size(1000, 1000); // Set the size of the canvas to 400x400 pixels
@@ -20,6 +24,8 @@ void setup() {
 void draw() {
   background(0); // Set background color to black
   drawPacman();
+  drawEnemy();
+  bouncingMovement();
 }
 
 void drawPacman() {
@@ -31,8 +37,11 @@ void drawPacman() {
   
   mouthAnimation();
   movement();
-  
+}
 
+void drawEnemy(){
+   fill(255, 0, 0); // Set fill color to red for the enemy
+   ellipse(enemyX, enemyY, enemySize, enemySize); // Draw the enemy as a red circle
 }
 
 
@@ -81,6 +90,17 @@ void movement(){
    }
  }
 
+}
+
+void bouncingMovement(){
+  int radius = enemySize/2;
+  enemyX = enemyX + enemySpeed;
+  if((enemyX + radius)>width){
+    enemySpeed=-abs(enemySpeed);
+  }
+  else if((enemyX - radius)<0){
+    enemySpeed = abs(enemySpeed);
+  }
 }
 
 void keyPressed(){
