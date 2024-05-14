@@ -2,6 +2,8 @@ float mouthAngle = 45; // Initial angle of Pac-Man's mouth
 int animationDuration = 800; // Duration of animation in milliseconds
 int startTime; // Variable to store the start time of the animation
 
+int timeCounter = 0;
+int currentSecond= 0;
 
 int pacmanX=600;
 int pacmanY=200;
@@ -15,6 +17,8 @@ int enemyX=200;
 int enemyY=200;
 int enemySize=100;
 int enemySpeed=2;
+boolean isEnemyVulnerable = false;
+
 
 void setup() {
   size(1000, 1000); // Set the size of the canvas to 400x400 pixels
@@ -24,8 +28,13 @@ void setup() {
 void draw() {
   background(0); // Set background color to black
   drawPacman();
+  
+  if(isEnemyVulnerable){
+    vulnerabilityChecker();
+  }
   drawEnemy();
-  bouncingMovement();
+ 
+  //collisionDetection();
 }
 
 void drawPacman() {
@@ -40,8 +49,13 @@ void drawPacman() {
 }
 
 void drawEnemy(){
-   fill(255, 0, 0); // Set fill color to red for the enemy
-   ellipse(enemyX, enemyY, enemySize, enemySize); // Draw the enemy as a red circle
+  if(isEnemyVulnerable){
+    fill(255,255,255);
+  }else{
+    fill(255, 0, 0);
+  }
+  ellipse(enemyX, enemyY, enemySize, enemySize); // Draw the enemy as a red circle
+  bouncingMovement();
 }
 
 
@@ -103,8 +117,39 @@ void bouncingMovement(){
   }
 }
 
+void collisionDetection(){
+  // Calculate the distance between Pac-Man and the enemy
+  float distance = dist(pacmanX, pacmanY, enemyX, enemyY);
+  
+  // If the distance is less than the sum of their radii, it means they are colliding
+  if (distance < (pacmanWidth / 2 + enemySize / 2)) {
+    // Close the window when collision occurs
+    exit();
+    
+  }
+}
+
+
+void vulnerabilityChecker(){
+  if(currentSecond != second()){
+    timeCounter += 1;
+    currentSecond = second();
+    println("time counter update == "+timeCounter);
+    if(timeCounter !=0 && timeCounter % 3 == 0){
+        isEnemyVulnerable = false;
+        timeCounter = 0;
+        currentSecond = 0;
+    }
+  }
+}
+
 void keyPressed(){
   if(key == ' '){
     faceRight =! faceRight;
+    
+    //for testing purpose only
+    //currentSecond = second();
+    //isEnemyVulnerable = true;
+    
   }
 }
