@@ -277,8 +277,10 @@ void drawPellets() {
 void collisionDetection(){
   float distance = dist(pacmanX, pacmanY, enemyX, enemyY);
   
-  if (distance < (pacmanWidth / 2 + enemySize / 2)) {
-    exit(); 
+  if(!isEnemyVulnerable){
+     if (distance < (pacmanWidth / 2 + enemySize / 2)) {
+      exit(); 
+  }
   }
 }
 
