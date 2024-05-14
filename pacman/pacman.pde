@@ -22,12 +22,14 @@ int enemySpeed=2;
 boolean isEnemyVulnerable = false;
 
 
+int fruitTimeCounter = 0;
+int fruitCurrentSecond = 0;
 
 int fruitX=50;
 int fruitY = 100;
 int fruitSize=30;
 boolean fruitEaten =false;
-boolean fruitReset = false;
+
 
 
 int resetTimeCounter = 0;
@@ -84,6 +86,9 @@ int pellet12Y = 100;
 boolean pellet12Eaten = false;
 
 
+
+
+
 void setup() {
   size(800, 200); 
   startTime = millis();
@@ -102,7 +107,14 @@ void draw() {
     resetPalletChceker();
   }
   drawFruit();
+  if(fruitEaten){
+    resetFruit();
+  }
   palletsCollisionDetection();
+  if(!fruitEaten){
+    fruitCollisionDetection();
+  }
+  
  //collisionDetection();
  displayScore();
 }
@@ -195,15 +207,15 @@ void bouncingMovement(){
 void drawFruit(){
   if(!fruitEaten){
     fill(255, 192, 203); // Red color for the apple
-   ellipse(fruitX, fruitY, fruitSize, fruitSize); // Draw the apple body
+    ellipse(fruitX, fruitY, fruitSize, fruitSize); // Draw the apple body
 
-  stroke(139, 69, 19); // Brown color for the stem
-  strokeWeight(5); // Thicker line for the stem
-  line(fruitX, fruitY - fruitSize / 2, fruitX, fruitY - fruitSize / 2 - 10);
-  
-  fill(34, 139, 34); // Green color for the leaf
-  noStroke(); // Disable stroke for the leaf
-  ellipse(fruitX + 10, fruitY - fruitSize / 2 - 10, 20, 10); // Draw the leaf
+    stroke(139, 69, 19); // Brown color for the stem
+    strokeWeight(5); // Thicker line for the stem
+    line(fruitX, fruitY - fruitSize / 2, fruitX, fruitY - fruitSize / 2 - 10);
+    
+    fill(34, 139, 34); // Green color for the leaf
+    noStroke(); // Disable stroke for the leaf
+    ellipse(fruitX + 10, fruitY - fruitSize / 2 - 10, 20, 10); // Draw the leaf
   }
    
 }
@@ -274,7 +286,6 @@ void vulnerabilityChecker(){
   if(currentSecondVulnerability != second()){
     vulnerabilityTimeCounter += 1;
     currentSecondVulnerability = second();
-    println("time counter update == "+vulnerabilityTimeCounter);
     if(vulnerabilityTimeCounter !=0 && vulnerabilityTimeCounter % 3 == 0){
         isEnemyVulnerable = false;
         vulnerabilityTimeCounter = 0;
@@ -308,6 +319,18 @@ void resetAllPallets(){
   pellet10Eaten = false;
   pellet11Eaten = false;
   pellet12Eaten = false;
+}
+
+void resetFruit(){
+  if(fruitCurrentSecond != second()){
+    fruitTimeCounter += 1;
+    fruitCurrentSecond = second();
+    if(fruitTimeCounter !=0 && fruitTimeCounter % 5 == 0){
+        fruitEaten = false;
+        fruitTimeCounter = 0;
+        fruitCurrentSecond = 0;
+    }
+  }
 }
 
 void palletsCollisionDetection(){
@@ -398,13 +421,22 @@ void palletsCollisionDetection(){
   }
 }
 
+void fruitCollisionDetection(){
+  float distance = dist(pacmanX, pacmanY, fruitX, fruitY);
+    if (distance < (pacmanWidth / 2 + fruitSize/2)) { 
+      fruitEaten = true; 
+      currentSecondVulnerability= second();
+      isEnemyVulnerable = true;
+       
+    }
+}
+
 void keyPressed(){
   if(key == ' '){
     faceRight =! faceRight;
     
     //for testing purpose only
-    //currentSecondVulnerability= second();
-    //isEnemyVulnerable = true;
+    
     
   }
 }
