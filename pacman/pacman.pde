@@ -15,10 +15,10 @@ int pacmanSpeed=3;
 boolean faceRight = true;
 
 
-int enemyX=200;
+float enemyX=350;
 int enemyY=100;
 int enemySize=40;
-int enemySpeed=2;
+float enemySpeed=2.5;
 boolean isEnemyVulnerable = false;
 
 
@@ -115,7 +115,7 @@ void draw() {
     fruitCollisionDetection();
   }
   
- //collisionDetection();
+ collisionDetection();
  displayScore();
 }
 
@@ -141,7 +141,7 @@ void drawPacman() {
 
 void drawEnemy(){
   if(isEnemyVulnerable){
-    fill(255,255,255);
+    fill(255, 165, 0);
   }else{
     fill(255, 0, 0);
   }
@@ -301,6 +301,10 @@ void displayScore() {
   textSize(20); 
   text("Score: " + score, 10, 30); 
   
+  if(isEnemyVulnerable){
+     text("Enemy is vulnerable", 300, 30); 
+  }
+  
   if(score != 0 && score % 120 == 0){
     palletsReset = true;
   }
@@ -325,7 +329,7 @@ void resetFruit(){
   if(fruitCurrentSecond != second()){
     fruitTimeCounter += 1;
     fruitCurrentSecond = second();
-    if(fruitTimeCounter !=0 && fruitTimeCounter % 5 == 0){
+    if(fruitTimeCounter !=0 && fruitTimeCounter % 10 == 0){
         fruitEaten = false;
         fruitTimeCounter = 0;
         fruitCurrentSecond = 0;
@@ -433,10 +437,6 @@ void fruitCollisionDetection(){
 
 void keyPressed(){
   if(key == ' '){
-    faceRight =! faceRight;
-    
-    //for testing purpose only
-    
-    
+    faceRight =! faceRight;  
   }
 }
